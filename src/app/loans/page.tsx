@@ -1,11 +1,11 @@
-import Link from "next/link";
-import { ArrowLeft, Banknote, CalendarDays, Search } from "lucide-react";
+import { CalendarDays, Search } from "lucide-react";
 import {
   ClientStatus,
   LoanStatus,
   PaymentFrequency,
 } from "@/generated/prisma/enums";
 import { LoanForm } from "@/app/loans/loan-form";
+import { AppShell } from "@/components/app-shell";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/session";
 
@@ -126,34 +126,13 @@ export default async function LoansPage({ searchParams }: LoansPageProps) {
     .reduce((total, loan) => total + Number(loan.totalAmount.toString()), 0);
 
   return (
-    <main className="min-h-screen bg-[#f7f4ee] text-slate-950">
-      <section className="border-b border-slate-200 bg-white">
-        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-5 sm:px-6 lg:px-8">
-          <Link
-            className="inline-flex w-fit items-center gap-2 text-sm font-medium text-slate-600 transition hover:text-slate-950"
-            href="/"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Dashboard
-          </Link>
-          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div>
-              <p className="text-sm font-medium text-emerald-700">
-                Creditos y calendario
-              </p>
-              <h1 className="mt-1 text-2xl font-semibold tracking-normal sm:text-3xl">
-                Prestamos
-              </h1>
-            </div>
-            <span className="inline-flex w-fit items-center gap-2 rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-medium text-slate-700">
-              <Banknote className="h-4 w-4 text-emerald-700" />
-              {user.name} / ADMIN
-            </span>
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto grid max-w-7xl gap-6 px-4 py-6 sm:px-6 lg:grid-cols-[420px_1fr] lg:px-8">
+    <AppShell
+      description="Crea créditos, genera calendarios de cuotas y revisa cartera activa."
+      eyebrow="Créditos y calendario"
+      title="Préstamos"
+      user={user}
+    >
+      <section className="grid gap-6 lg:grid-cols-[420px_1fr]">
         <aside className="h-fit rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
           <h2 className="text-base font-semibold">Crear prestamo</h2>
           <p className="mt-1 text-sm leading-6 text-slate-600">
@@ -314,6 +293,6 @@ export default async function LoansPage({ searchParams }: LoansPageProps) {
           </div>
         </section>
       </section>
-    </main>
+    </AppShell>
   );
 }

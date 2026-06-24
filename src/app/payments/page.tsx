@@ -1,11 +1,11 @@
-import Link from "next/link";
-import { ArrowLeft, ReceiptText, Search, WalletCards } from "lucide-react";
+import { Search, WalletCards } from "lucide-react";
 import {
   InstallmentStatus,
   LoanStatus,
   PaymentFrequency,
 } from "@/generated/prisma/enums";
 import { PaymentForm } from "@/app/payments/payment-form";
+import { AppShell } from "@/components/app-shell";
 import { prisma } from "@/lib/prisma";
 import { requireSession } from "@/lib/session";
 
@@ -158,34 +158,12 @@ export default async function PaymentsPage({ searchParams }: PaymentsPageProps) 
   );
 
   return (
-    <main className="min-h-screen bg-[#f7f4ee] text-slate-950">
-      <section className="border-b border-slate-200 bg-white">
-        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-5 sm:px-6 lg:px-8">
-          <Link
-            className="inline-flex w-fit items-center gap-2 text-sm font-medium text-slate-600 transition hover:text-slate-950"
-            href="/"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Dashboard
-          </Link>
-          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div>
-              <p className="text-sm font-medium text-emerald-700">
-                Registro de abonos y pagos
-              </p>
-              <h1 className="mt-1 text-2xl font-semibold tracking-normal sm:text-3xl">
-                Cobros
-              </h1>
-            </div>
-            <span className="inline-flex w-fit items-center gap-2 rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-medium text-slate-700">
-              <ReceiptText className="h-4 w-4 text-emerald-700" />
-              {user.name} / {user.role}
-            </span>
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+    <AppShell
+      description="Registra pagos completos o abonos parciales sobre cuotas pendientes."
+      eyebrow="Registro de abonos y pagos"
+      title="Cobros"
+      user={user}
+    >
         <div className="grid gap-4 md:grid-cols-3">
           <article className="rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-emerald-950 shadow-sm">
             <p className="text-sm font-medium">Pendiente por cobrar</p>
@@ -365,7 +343,6 @@ export default async function PaymentsPage({ searchParams }: PaymentsPageProps) 
             </div>
           </aside>
         </div>
-      </section>
-    </main>
+    </AppShell>
   );
 }

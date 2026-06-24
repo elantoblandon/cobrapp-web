@@ -1,5 +1,4 @@
-import Link from "next/link";
-import { ArrowLeft, MapPinned, Route as RouteIcon } from "lucide-react";
+import { MapPinned, Route as RouteIcon } from "lucide-react";
 import {
   removeClientAssignmentAction,
   removeCollectorAssignmentAction,
@@ -10,6 +9,7 @@ import {
   AssignCollectorForm,
   CreateRouteForm,
 } from "@/app/routes/route-forms";
+import { AppShell } from "@/components/app-shell";
 import { ClientStatus, UserRole, UserStatus } from "@/generated/prisma/enums";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/session";
@@ -108,34 +108,12 @@ export default async function RoutesPage() {
   );
 
   return (
-    <main className="min-h-screen bg-[#f7f4ee] text-slate-950">
-      <section className="border-b border-slate-200 bg-white">
-        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-5 sm:px-6 lg:px-8">
-          <Link
-            className="inline-flex w-fit items-center gap-2 text-sm font-medium text-slate-600 transition hover:text-slate-950"
-            href="/"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Dashboard
-          </Link>
-          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div>
-              <p className="text-sm font-medium text-emerald-700">
-                Zonas, rutas y cobradores
-              </p>
-              <h1 className="mt-1 text-2xl font-semibold tracking-normal sm:text-3xl">
-                Rutas
-              </h1>
-            </div>
-            <span className="inline-flex w-fit items-center gap-2 rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-medium text-slate-700">
-              <MapPinned className="h-4 w-4 text-emerald-700" />
-              {user.name} / ADMIN
-            </span>
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+    <AppShell
+      description="Organiza zonas de cobro, clientes y cobradores asignados."
+      eyebrow="Zonas, rutas y cobradores"
+      title="Rutas"
+      user={user}
+    >
         <div className="grid gap-4 md:grid-cols-3">
           <article className="rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-emerald-950 shadow-sm">
             <p className="text-sm font-medium">Rutas activas</p>
@@ -332,7 +310,6 @@ export default async function RoutesPage() {
             </div>
           </section>
         </div>
-      </section>
-    </main>
+    </AppShell>
   );
 }
