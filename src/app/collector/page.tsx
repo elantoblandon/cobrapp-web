@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, MapPinned, ReceiptText, Route } from "lucide-react";
+import { MapPin, MapPinned, Phone, ReceiptText, Route } from "lucide-react";
 import {
   InstallmentStatus,
   LoanStatus,
@@ -7,7 +7,7 @@ import {
   UserRole,
 } from "@/generated/prisma/enums";
 import { PaymentForm } from "@/app/payments/payment-form";
-import { logoutAction } from "@/app/login/actions";
+import { AppShell } from "@/components/app-shell";
 import { prisma } from "@/lib/prisma";
 import { requireSession } from "@/lib/session";
 
@@ -157,41 +157,13 @@ export default async function CollectorPage() {
   );
 
   return (
-    <main className="min-h-screen bg-[#f7f4ee] text-slate-950">
-      <section className="sticky top-0 z-10 border-b border-slate-200 bg-white">
-        <div className="mx-auto flex max-w-3xl flex-col gap-4 px-4 py-4">
-          <div className="flex items-center justify-between gap-3">
-            <Link
-              className="inline-flex items-center gap-2 text-sm font-medium text-slate-600 transition hover:text-slate-950"
-              href="/"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Panel
-            </Link>
-            <form action={logoutAction}>
-              <button
-                className="h-9 rounded-md border border-slate-300 bg-white px-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
-                type="submit"
-              >
-                Salir
-              </button>
-            </form>
-          </div>
-          <div>
-            <p className="text-sm font-medium text-emerald-700">
-              Vista del cobrador
-            </p>
-            <h1 className="mt-1 text-2xl font-semibold tracking-normal">
-              Ruta de cobro
-            </h1>
-            <p className="mt-1 text-sm text-slate-600">
-              {user.name} / {assignedRoutes.length} rutas asignadas
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-3xl px-4 py-5">
+    <AppShell
+      description={`${user.name} / ${assignedRoutes.length} rutas asignadas`}
+      eyebrow="Vista del cobrador"
+      title="Ruta de cobro"
+      user={user}
+    >
+      <section className="mx-auto max-w-3xl">
         <div className="grid gap-3 sm:grid-cols-3">
           <article className="rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-emerald-950 shadow-sm">
             <p className="text-sm font-medium">Pendiente</p>
@@ -260,17 +232,48 @@ export default async function CollectorPage() {
                       className="rounded-lg border border-slate-200 bg-slate-50 p-4"
                       key={routeClient.client.id}
                     >
-                      <div className="flex flex-wrap items-center gap-2">
-                        <h3 className="text-sm font-semibold">
-                          {routeClient.client.fullName}
-                        </h3>
-                        <span className="rounded-md bg-white px-2 py-1 text-xs font-medium text-slate-600 ring-1 ring-slate-200">
-                          #{routeClient.sortOrder}
-                        </span>
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="min-w-0">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <h3 className="text-base font-semibold sm:text-sm">
+                              {routeClient.client.fullName}
+                            </h3>
+                            <span className="rounded-md bg-white px-2 py-1 text-xs font-medium text-slate-600 ring-1 ring-slate-200">
+                              #{routeClient.sortOrder}
+                            </span>
+                          </div>
+                          <p className="mt-2 text-sm text-slate-600">
+                            {routeClient.client.identityNumber ||
+                              "Sin identidad"}
+                          </p>
+                        </div>
+                        <div className="flex shrink-0 gap-2">
+                          {routeClient.client.phone ? (
+                            <a
+                              className="inline-flex h-11 w-11 items-center justify-center rounded-md border border-emerald-200 bg-white text-emerald-700 transition hover:bg-emerald-50"
+                              href={`tel:${routeClient.client.phone}`}
+                              title="Llamar"
+                            >
+                              <Phone className="h-4 w-4" />
+                            </a>
+                          ) : null}
+                          {routeClient.client.address ? (
+                            <a
+                              className="inline-flex h-11 w-11 items-center justify-center rounded-md border border-sky-200 bg-white text-sky-700 transition hover:bg-sky-50"
+                              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                                routeClient.client.address,
+                              )}`}
+                              rel="noreferrer"
+                              target="_blank"
+                              title="Abrir direccion"
+                            >
+                              <MapPin className="h-4 w-4" />
+                            </a>
+                          ) : null}
+                        </div>
                       </div>
                       <p className="mt-2 text-sm text-slate-600">
-                        {routeClient.client.identityNumber || "Sin identidad"}{" "}
-                        / {routeClient.client.phone || "Sin telefono"}
+                        {routeClient.client.phone || "Sin telefono"}
                       </p>
                       <p className="mt-1 text-sm text-slate-500">
                         {routeClient.client.businessName ||
@@ -348,6 +351,6 @@ export default async function CollectorPage() {
           Ver cobros generales
         </Link>
       </section>
-    </main>
+    </AppShell>
   );
 }

@@ -113,13 +113,13 @@ export function AppShell({
                   ) : null}
                 </div>
 
-                <div className="flex flex-wrap gap-2 lg:hidden">
-                  {navigation.slice(0, 6).map((item) => {
+                <div className="flex gap-2 overflow-x-auto pb-1 lg:hidden">
+                  {navigation.map((item) => {
                     const Icon = item.icon;
 
                     return (
                       <Link
-                        className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 bg-slate-50 text-slate-600 transition hover:bg-emerald-50 hover:text-emerald-800"
+                        className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-slate-200 bg-slate-50 text-slate-600 transition hover:bg-emerald-50 hover:text-emerald-800"
                         href={item.href}
                         key={item.name}
                         title={item.name}
@@ -130,7 +130,7 @@ export function AppShell({
                   })}
                   <form action={logoutAction}>
                     <button
-                      className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-600 transition hover:bg-slate-50"
+                      className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-600 transition hover:bg-slate-50"
                       title="Salir"
                       type="submit"
                     >

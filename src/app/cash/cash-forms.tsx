@@ -29,7 +29,7 @@ export function OpenCashForm({ collectors }: { collectors: Collector[] }) {
           Cobrador
         </label>
         <select
-          className="mt-2 h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-sm outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+          className="mt-2 h-12 w-full rounded-md border border-slate-300 bg-white px-3 text-base outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 sm:h-11 sm:text-sm"
           id="collectorId"
           name="collectorId"
           required
@@ -48,7 +48,7 @@ export function OpenCashForm({ collectors }: { collectors: Collector[] }) {
             Fecha
           </label>
           <input
-            className="mt-2 h-11 w-full rounded-md border border-slate-300 px-3 text-sm outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+            className="mt-2 h-12 w-full rounded-md border border-slate-300 px-3 text-base outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 sm:h-11 sm:text-sm"
             id="sessionDate"
             name="sessionDate"
             required
@@ -60,7 +60,7 @@ export function OpenCashForm({ collectors }: { collectors: Collector[] }) {
             Dinero entregado
           </label>
           <input
-            className="mt-2 h-11 w-full rounded-md border border-slate-300 px-3 text-sm outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+            className="mt-2 h-12 w-full rounded-md border border-slate-300 px-3 text-base outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 sm:h-11 sm:text-sm"
             id="openingAmount"
             min="0"
             name="openingAmount"
@@ -71,7 +71,7 @@ export function OpenCashForm({ collectors }: { collectors: Collector[] }) {
         </div>
       </div>
       <textarea
-        className="min-h-20 w-full rounded-md border border-slate-300 px-3 py-2 text-sm outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+        className="min-h-20 w-full rounded-md border border-slate-300 px-3 py-2 text-base outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 sm:text-sm"
         name="notes"
         placeholder="Nota opcional"
       />
@@ -98,7 +98,7 @@ export function ExpenseForm({ cashSessionId }: { cashSessionId: string }) {
     <form action={formAction} className="mt-3 grid gap-2 sm:grid-cols-3">
       <input name="cashSessionId" type="hidden" value={cashSessionId} />
       <input
-        className="h-10 rounded-md border border-slate-300 px-3 text-sm outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+        className="h-12 rounded-md border border-slate-300 px-3 text-base outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 sm:h-10 sm:text-sm"
         min="0.01"
         name="amount"
         placeholder="Monto"
@@ -107,13 +107,13 @@ export function ExpenseForm({ cashSessionId }: { cashSessionId: string }) {
         type="number"
       />
       <input
-        className="h-10 rounded-md border border-slate-300 px-3 text-sm outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+        className="h-12 rounded-md border border-slate-300 px-3 text-base outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 sm:h-10 sm:text-sm"
         name="category"
         placeholder="Categoria"
         required
       />
       <button
-        className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-slate-300 bg-white px-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-70"
+        className="inline-flex h-12 items-center justify-center gap-2 rounded-md border border-slate-300 bg-white px-3 text-base font-medium text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-70 sm:h-10 sm:text-sm"
         disabled={isPending}
         type="submit"
       >
@@ -121,7 +121,7 @@ export function ExpenseForm({ cashSessionId }: { cashSessionId: string }) {
         Gasto
       </button>
       <input
-        className="h-10 rounded-md border border-slate-300 px-3 text-sm outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 sm:col-span-3"
+        className="h-12 rounded-md border border-slate-300 px-3 text-base outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 sm:col-span-3 sm:h-10 sm:text-sm"
         name="description"
         placeholder="Descripcion opcional"
       />
@@ -142,7 +142,7 @@ export function CloseCashForm({ cashSessionId }: { cashSessionId: string }) {
     <form action={formAction} className="mt-3 grid gap-2 sm:grid-cols-[1fr_auto]">
       <input name="cashSessionId" type="hidden" value={cashSessionId} />
       <input
-        className="h-10 rounded-md border border-slate-300 px-3 text-sm outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+        className="h-12 rounded-md border border-slate-300 px-3 text-base outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 sm:h-10 sm:text-sm"
         min="0"
         name="countedAmount"
         placeholder="Efectivo contado"
@@ -151,7 +151,7 @@ export function CloseCashForm({ cashSessionId }: { cashSessionId: string }) {
         type="number"
       />
       <button
-        className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-slate-900 px-3 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-70"
+        className="inline-flex h-12 items-center justify-center gap-2 rounded-md bg-slate-900 px-3 text-base font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-70 sm:h-10 sm:text-sm"
         disabled={isPending}
         type="submit"
       >
@@ -159,7 +159,7 @@ export function CloseCashForm({ cashSessionId }: { cashSessionId: string }) {
         Cerrar
       </button>
       <textarea
-        className="min-h-16 rounded-md border border-slate-300 px-3 py-2 text-sm outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 sm:col-span-2"
+        className="min-h-16 rounded-md border border-slate-300 px-3 py-2 text-base outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 sm:col-span-2 sm:text-sm"
         name="notes"
         placeholder="Nota de cierre opcional"
       />
