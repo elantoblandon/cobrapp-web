@@ -1,36 +1,85 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Cobrapp Web
 
-## Getting Started
+Aplicacion web responsiva para gestion de prestamos, rutas, cobros, caja diaria y cobradores.
 
-First, run the development server:
+## Stack
+
+- Next.js App Router
+- TypeScript
+- Tailwind CSS
+- Prisma
+- PostgreSQL
+- PWA basica con cola offline inicial para pagos
+
+## Configuracion local
+
+1. Instalar dependencias:
+
+```bash
+npm install
+```
+
+2. Configurar `.env`:
+
+```env
+DATABASE_URL="postgresql://..."
+AUTH_SECRET="minimo-32-caracteres"
+ADMIN_NAME="Administrador"
+ADMIN_EMAIL="admin@cobrapp.local"
+ADMIN_PASSWORD="CambiaEstaClave123!"
+```
+
+3. Verificar entorno:
+
+```bash
+npm run check:env
+```
+
+4. Ejecutar migraciones:
+
+```bash
+npm run db:migrate -- --name init
+```
+
+5. Crear/actualizar admin inicial:
+
+```bash
+npm run db:seed
+```
+
+6. Iniciar desarrollo:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Comandos
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run lint
+npm run typecheck
+npm run build
+npm run verify
+npm run db:studio
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Modulos
 
-## Learn More
+- Login y roles
+- Usuarios
+- Clientes
+- Prestamos y cuotas
+- Cobros y abonos
+- Rutas y asignaciones
+- Vista movil del cobrador
+- Caja diaria y gastos
+- Dashboard con datos reales
+- PWA/offline inicial
 
-To learn more about Next.js, take a look at the following resources:
+## Healthcheck
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```text
+/api/health
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Devuelve estado de app y base de datos.
