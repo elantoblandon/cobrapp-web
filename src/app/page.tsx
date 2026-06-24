@@ -1,6 +1,5 @@
 import {
   Banknote,
-  CalendarClock,
   MapPinned,
   ReceiptText,
   ShieldCheck,
@@ -9,13 +8,14 @@ import {
   WalletCards,
 } from "lucide-react";
 import Link from "next/link";
-import { logoutAction } from "@/app/login/actions";
 import {
   CashSessionStatus,
   InstallmentStatus,
   LoanStatus,
   UserRole,
 } from "@/generated/prisma/enums";
+import { AppShell } from "@/components/app-shell";
+import { MetricCard, Panel, SummaryRow } from "@/components/dashboard-ui";
 import { prisma } from "@/lib/prisma";
 import { requireSession } from "@/lib/session";
 
@@ -257,242 +257,159 @@ export default async function Home() {
       label: "Cobros de hoy",
       value: formatMoney(collectedToday),
       detail: `${paymentsToday.length} pagos registrados`,
-      tone: "border-emerald-200 bg-emerald-50 text-emerald-950",
+      accent: "emerald" as const,
     },
     {
       label: "Dinero en la calle",
       value: formatMoney(streetMoney),
       detail: `${activeLoans.length} prestamos activos`,
-      tone: "border-sky-200 bg-sky-50 text-sky-950",
+      accent: "sky" as const,
     },
     {
       label: "Clientes en mora",
       value: `${overdueClients}`,
       detail: `${formatMoney(overdueAmount)} vencido`,
-      tone: "border-rose-200 bg-rose-50 text-rose-950",
+      accent: "rose" as const,
     },
     {
       label: "Caja abierta",
       value: `${openCashSessions.length}`,
       detail: `${formatMoney(openCashExpected)} esperado`,
-      tone: "border-amber-200 bg-amber-50 text-amber-950",
+      accent: "amber" as const,
     },
   ];
 
   return (
-    <main className="min-h-screen bg-[#f7f4ee] text-slate-950">
-      <section className="border-b border-slate-200 bg-white">
-        <div className="mx-auto flex max-w-7xl flex-col gap-5 px-4 py-5 sm:px-6 lg:px-8">
-          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div>
-              <p className="text-sm font-medium text-emerald-700">
-                Cobrapp Web MVP
-              </p>
-              <h1 className="mt-1 text-2xl font-semibold tracking-normal text-slate-950 sm:text-3xl">
-                Panel administrativo de prestamos y cobros
-              </h1>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <span className="inline-flex items-center gap-2 rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-medium text-slate-700">
-                <ShieldCheck className="h-4 w-4 text-emerald-700" />
-                {user.name} / {user.role}
-              </span>
-              <span className="inline-flex items-center gap-2 rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-medium text-slate-700">
-                <CalendarClock className="h-4 w-4 text-sky-700" />
-                Honduras / HNL
-              </span>
-              <form action={logoutAction}>
-                <button
-                  className="h-10 rounded-md border border-slate-300 bg-white px-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
-                  type="submit"
+    <AppShell
+      description="Métricas vivas de cartera, cobros, mora y caja para operar el negocio desde un solo panel."
+      eyebrow="Cobrapp Web MVP"
+      title="Panel administrativo"
+      user={user}
+    >
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {metrics.map((metric) => (
+          <MetricCard
+            accent={metric.accent}
+            detail={metric.detail}
+            key={metric.label}
+            label={metric.label}
+            value={metric.value}
+          />
+        ))}
+      </div>
+
+      <div className="mt-6 grid gap-6 xl:grid-cols-[1fr_420px]">
+        <Panel
+          description="Accesos principales de operación."
+          title="Módulos del MVP"
+        >
+          <div className="grid gap-3 sm:grid-cols-2">
+            {modules.map((module) => {
+              const Icon = module.icon;
+
+              return (
+                <Link
+                  className="rounded-lg border border-slate-200 bg-slate-50 p-4 transition hover:border-emerald-200 hover:bg-white"
+                  href={module.href}
+                  key={module.name}
                 >
-                  Salir
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          {metrics.map((metric) => (
-            <article
-              className={`rounded-lg border p-4 shadow-sm ${metric.tone}`}
-              key={metric.label}
-            >
-              <p className="text-sm font-medium">{metric.label}</p>
-              <p className="mt-3 text-2xl font-semibold tracking-normal">
-                {metric.value}
-              </p>
-              <p className="mt-1 text-sm opacity-75">{metric.detail}</p>
-            </article>
-          ))}
-        </div>
-
-        <div className="mt-6 grid gap-6 xl:grid-cols-[1fr_420px]">
-          <section className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
-            <div className="flex items-center justify-between gap-4">
-              <div>
-                <h2 className="text-base font-semibold text-slate-950">
-                  Modulos del MVP
-                </h2>
-                <p className="mt-1 text-sm text-slate-600">
-                  Accesos principales de operacion.
-                </p>
-              </div>
-            </div>
-
-            <div className="mt-4 grid gap-3 sm:grid-cols-2">
-              {modules.map((module) => {
-                const Icon = module.icon;
-
-                return (
-                  <Link
-                    className="rounded-lg border border-slate-200 bg-slate-50 p-4 transition hover:border-emerald-200 hover:bg-white"
-                    href={module.href}
-                    key={module.name}
-                  >
-                    <div className="flex items-start gap-3">
-                      <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-white text-emerald-700 ring-1 ring-slate-200">
-                        <Icon className="h-5 w-5" />
-                      </span>
-                      <div>
-                        <h3 className="text-sm font-semibold text-slate-950">
-                          {module.name}
-                        </h3>
-                        <p className="mt-1 text-sm leading-6 text-slate-600">
-                          {module.description}
-                        </p>
-                      </div>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-          </section>
-
-          <aside className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
-            <h2 className="text-base font-semibold text-slate-950">
-              Desempeno de hoy
-            </h2>
-            <div className="mt-4 space-y-3">
-              {collectors.length === 0 ? (
-                <p className="rounded-md border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-600">
-                  Aun no hay cobradores.
-                </p>
-              ) : null}
-
-              {collectors.map((collector) => {
-                const total = collector.collectedPayments.reduce(
-                  (sum, payment) => sum + decimalToNumber(payment.amount),
-                  0,
-                );
-
-                return (
-                  <div
-                    className="rounded-md border border-slate-200 bg-slate-50 p-3"
-                    key={collector.id}
-                  >
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <p className="text-sm font-semibold">
-                          {collector.name}
-                        </p>
-                        <p className="mt-1 text-xs text-slate-500">
-                          {collector.status} /{" "}
-                          {collector.cashSessions.length > 0
-                            ? "Caja abierta"
-                            : "Sin caja abierta"}
-                        </p>
-                      </div>
-                      <p className="text-sm font-semibold">
-                        {formatMoney(total)}
-                      </p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </aside>
-        </div>
-
-        <div className="mt-6 grid gap-6 lg:grid-cols-2">
-          <section className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
-            <h2 className="text-base font-semibold text-slate-950">
-              Ultimos pagos
-            </h2>
-            <div className="mt-4 space-y-3">
-              {recentPayments.length === 0 ? (
-                <p className="rounded-md border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-600">
-                  Aun no hay pagos registrados.
-                </p>
-              ) : null}
-              {recentPayments.map((payment) => (
-                <article
-                  className="rounded-md border border-slate-200 bg-slate-50 p-3"
-                  key={payment.id}
-                >
-                  <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-start gap-3">
+                    <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-white text-emerald-700 ring-1 ring-slate-200">
+                      <Icon className="h-5 w-5" />
+                    </span>
                     <div>
-                      <p className="text-sm font-semibold">
-                        {payment.client.fullName}
-                      </p>
-                      <p className="mt-1 text-xs text-slate-500">
-                        {payment.method} / {formatDate(payment.paidAt)} /{" "}
-                        {payment.collector.name}
+                      <h3 className="text-sm font-semibold text-slate-950">
+                        {module.name}
+                      </h3>
+                      <p className="mt-1 text-sm leading-6 text-slate-600">
+                        {module.description}
                       </p>
                     </div>
-                    <p className="text-sm font-semibold">
-                      {formatMoney(payment.amount)}
-                    </p>
                   </div>
-                </article>
-              ))}
-            </div>
-          </section>
+                </Link>
+              );
+            })}
+          </div>
+        </Panel>
 
-          <section className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
-            <h2 className="text-base font-semibold text-slate-950">
-              Proximas cuotas
-            </h2>
-            <div className="mt-4 space-y-3">
-              {upcomingInstallments.length === 0 ? (
-                <p className="rounded-md border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-600">
-                  No hay cuotas proximas.
-                </p>
-              ) : null}
-              {upcomingInstallments.map((installment) => {
-                const remaining =
-                  decimalToNumber(installment.amountDue) -
-                  decimalToNumber(installment.amountPaid);
+        <Panel title="Desempeño de hoy">
+          <div className="space-y-3">
+            {collectors.length === 0 ? (
+              <p className="rounded-md border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-600">
+                Aun no hay cobradores.
+              </p>
+            ) : null}
 
-                return (
-                  <article
-                    className="rounded-md border border-slate-200 bg-slate-50 p-3"
-                    key={installment.id}
-                  >
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <p className="text-sm font-semibold">
-                          {installment.loan.client.fullName}
-                        </p>
-                        <p className="mt-1 text-xs text-slate-500">
-                          Cuota {installment.number} / vence{" "}
-                          {formatDate(installment.dueDate)}
-                        </p>
-                      </div>
-                      <p className="text-sm font-semibold">
-                        {formatMoney(remaining)}
-                      </p>
-                    </div>
-                  </article>
-                );
-              })}
-            </div>
-          </section>
-        </div>
-      </section>
-    </main>
+            {collectors.map((collector) => {
+              const total = collector.collectedPayments.reduce(
+                (sum, payment) => sum + decimalToNumber(payment.amount),
+                0,
+              );
+
+              return (
+                <SummaryRow
+                  detail={`${collector.status} / ${
+                    collector.cashSessions.length > 0
+                      ? "Caja abierta"
+                      : "Sin caja abierta"
+                  }`}
+                  key={collector.id}
+                  title={collector.name}
+                  value={formatMoney(total)}
+                />
+              );
+            })}
+          </div>
+        </Panel>
+      </div>
+
+      <div className="mt-6 grid gap-6 lg:grid-cols-2">
+        <Panel title="Últimos pagos">
+          <div className="space-y-3">
+            {recentPayments.length === 0 ? (
+              <p className="rounded-md border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-600">
+                Aun no hay pagos registrados.
+              </p>
+            ) : null}
+            {recentPayments.map((payment) => (
+              <SummaryRow
+                detail={`${payment.method} / ${formatDate(payment.paidAt)} / ${
+                  payment.collector.name
+                }`}
+                key={payment.id}
+                title={payment.client.fullName}
+                value={formatMoney(payment.amount)}
+              />
+            ))}
+          </div>
+        </Panel>
+
+        <Panel title="Próximas cuotas">
+          <div className="space-y-3">
+            {upcomingInstallments.length === 0 ? (
+              <p className="rounded-md border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-600">
+                No hay cuotas próximas.
+              </p>
+            ) : null}
+            {upcomingInstallments.map((installment) => {
+              const remaining =
+                decimalToNumber(installment.amountDue) -
+                decimalToNumber(installment.amountPaid);
+
+              return (
+                <SummaryRow
+                  detail={`Cuota ${installment.number} / vence ${formatDate(
+                    installment.dueDate,
+                  )}`}
+                  key={installment.id}
+                  title={installment.loan.client.fullName}
+                  value={formatMoney(remaining)}
+                />
+              );
+            })}
+          </div>
+        </Panel>
+      </div>
+    </AppShell>
   );
 }
